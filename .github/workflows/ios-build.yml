@@ -1,0 +1,52 @@
+name: iOS Build
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  ios-export:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+          include-templates: true
+
+      - name: Import Developer Certificate
+        env:
+          DEVELOPER_CERT_B64: ${{ secrets.IOS_DEVELOPER_CERT_B64 }}
+          DEVELOPER_CERT_PASSWORD: ${{ secrets.IOS_DEVELOPER_CERT_PASSWORD }}
+        run: |
+          echo "$DEVELOPER_CERT_B64" | base64 -d > /tmp/distribution.p12
+          security create-keychain -p "" build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import /tmp/distribution.p12 \
+            -k build.keychain \
+            -P "$DEVELOPER_CERT_PASSWORD" \
+            -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "" build.keychain
+          rm /tmp/distribution.p12
+
+      - name: Install Provisioning Profile
+        env:
+          PROVISIONING_PROFILE_B64: ${{ secrets.IOS_PROVISIONING_PROFILE_B64 }}
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$PROVISIONING_PROFILE_B64" | base64 -d > \
+            ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+
+      - name: Export iOS
+        run: |
+          mkdir -p build/ios
+          godot --headless --export-release "iOS" build/ios/run-walk-breed.ipa
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: build/ios/

@@ -1,0 +1,25 @@
+# Godot
+.godot/
+*.translation
+
+# Export
+export/android/build/
+export/ios/build/
+build/
+
+# Signing & Secrets
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
