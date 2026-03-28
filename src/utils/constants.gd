@@ -17,6 +17,7 @@ const BASE_PET_STATS: Dictionary = {
 const MIN_DISTANCE_UPDATE_M: float = 5.0
 const EARTH_RADIUS_M: float = 6371000.0
 
-# バトル
+# オートバトル（1v1、プレイヤー操作なし）
 const MAX_BATTLE_TURNS: int = 30
 const BATTLE_TURN_DURATION_SEC: float = 2.0
+const MAX_SKILL_SLOTS: int = 4
