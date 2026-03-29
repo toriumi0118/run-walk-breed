@@ -13,7 +13,17 @@ func _ready() -> void:
 
 func _on_start_pressed() -> void:
 	GameManager.change_state(GameManager.GameState.HOME)
-	# TODO: ホーム画面へ遷移
+	# ペットを生成（セーブデータがあればロード、なければ新規作成）
+	var pet := SaveManager.load_pet()
+	if not pet:
+		pet = PetFactory.create("MyPet", Enums.PetType.RUNNER)
+		# ダミーの歩数を適用（ネイティブ連携前のテスト用）
+		var nurture := NurtureSystem.new()
+		nurture.apply_steps(pet, 3000)
+	var home := preload("res://src/scenes/ui/home_screen.tscn").instantiate()
+	home.setup(pet)
+	get_tree().root.add_child(home)
+	queue_free()
 
 
 func _on_settings_pressed() -> void:

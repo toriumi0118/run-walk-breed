@@ -1,0 +1,163 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/scenes/battle/battle_screen.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/scenes/pet/pet_display.tscn" id="2"]
+
+[node name="BattleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.18, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Battle Start!"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="MarginContainer/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="PetsRow" type="HBoxContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="PetAColumn" type="VBoxContainer" parent="MarginContainer/VBox/PetsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="PetADisplay" parent="MarginContainer/VBox/PetsRow/PetAColumn" instance=ExtResource("2")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HpBarA" type="ProgressBar" parent="MarginContainer/VBox/PetsRow/PetAColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 24)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HpLabelA" type="Label" parent="MarginContainer/VBox/PetsRow/PetAColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100 / 100"
+horizontal_alignment = 1
+
+[node name="VSLabel" type="Label" parent="MarginContainer/VBox/PetsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 0)
+text = "VS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PetBColumn" type="VBoxContainer" parent="MarginContainer/VBox/PetsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="PetBDisplay" parent="MarginContainer/VBox/PetsRow/PetBColumn" instance=ExtResource("2")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HpBarB" type="ProgressBar" parent="MarginContainer/VBox/PetsRow/PetBColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 24)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HpLabelB" type="Label" parent="MarginContainer/VBox/PetsRow/PetBColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100 / 100"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="MarginContainer/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="ActionLabel" type="Label" parent="MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Spacer3" type="Control" parent="MarginContainer/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="LogScroll" type="ScrollContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 300)
+
+[node name="LogContainer" type="VBoxContainer" parent="MarginContainer/VBox/LogScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResultPanel" type="Panel" parent="MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 160)
+visible = false
+
+[node name="ResultVBox" type="VBoxContainer" parent="MarginContainer/VBox/ResultPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ResultLabel" type="Label" parent="MarginContainer/VBox/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Result"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBox/ResultPanel/ResultVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 16)
+
+[node name="ContinueButton" type="Button" parent="MarginContainer/VBox/ResultPanel/ResultVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(200, 48)
+size_flags_horizontal = 4
+text = "Continue"
