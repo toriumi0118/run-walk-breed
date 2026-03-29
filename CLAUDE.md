@@ -61,8 +61,12 @@ run-walk-breed/
 │   └── ui_theme.tres
 │
 ├── plugins/                     # ネイティブプラグイン
-│   ├── android/                 # Android Plugin v2（Java/Kotlin）
-│   └── ios/                     # SwiftGodot Extensions
+│   ├── android/                 # Android Plugin v2（Java/Kotlin）※後回し
+│   └── ios/                     # SwiftGodot Extensions + build.sh
+│       ├── Package.swift
+│       ├── Sources/             # HealthKitPlugin, LocationPlugin, MapViewPlugin
+│       ├── build.sh             # ビルドスクリプト
+│       └── ios_plugins.gdextension.template
 │
 ├── tests/                       # GdUnit4 テスト
 │   └── ...
@@ -90,10 +94,14 @@ godot project.godot
 # ヘッドレスでテスト実行
 godot --headless -s addons/gdUnit4/bin/GdUnitCmdTool.gd --add "res://tests"
 
-# エクスポート（ローカル）
-godot --headless --export-release "Android" build/android/game.apk
-godot --headless --export-release "iOS" build/ios/game.ipa
+# iOS Swift プラグインビルド
+cd plugins/ios && ./build.sh release && cd ../..
+
+# iOS エクスポート（Xcode プロジェクト生成）
+godot --headless --export-release "iOS" export/ios/RunWalkBreed.xcodeproj
 ```
+
+**iOS ビルドの詳細手順**: [docs/IOS_BUILD.md](docs/IOS_BUILD.md)
 
 ### CI/CD（GitHub Actions）
 
