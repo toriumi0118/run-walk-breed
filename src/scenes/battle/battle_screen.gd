@@ -74,8 +74,8 @@ func _replay_next_log() -> void:
 	# HP バーを現在の状態に更新（ログ進行に合わせて段階的に）
 	# 簡易実装: 最終HPに向かって補間
 	var progress := float(_replay_index + 1) / float(maxi(log_lines.size(), 1))
-	var target_hp_a := lerp(float(_engine.get_max_hp_a()), float(_engine.get_hp_a()), progress)
-	var target_hp_b := lerp(float(_engine.get_max_hp_b()), float(_engine.get_hp_b()), progress)
+	var target_hp_a: float = lerpf(float(_engine.get_max_hp_a()), float(_engine.get_hp_a()), progress)
+	var target_hp_b: float = lerpf(float(_engine.get_max_hp_b()), float(_engine.get_hp_b()), progress)
 	_hp_bar_a.value = target_hp_a
 	_hp_bar_b.value = target_hp_b
 	_update_hp_labels()
