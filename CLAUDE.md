@@ -90,10 +90,22 @@ godot project.godot
 # ヘッドレスでテスト実行
 godot --headless -s addons/gdUnit4/bin/GdUnitCmdTool.gd --add "res://tests"
 
-# エクスポート（ローカル）
+# iOS ビルド（詳細は docs/IOS_BUILD_GUIDE.md を参照）
+cd plugins/ios && ./build.sh release && cd ../..
+godot --headless --export-release "iOS" export/ios/RunWalkBreed.xcodeproj
+open export/ios/RunWalkBreed.xcodeproj  # Xcode でビルド & 実機転送
+
+# Android エクスポート（現在は保留）
 godot --headless --export-release "Android" build/android/game.apk
-godot --headless --export-release "iOS" build/ios/game.ipa
 ```
+
+### iOS ビルド詳細
+
+**[docs/IOS_BUILD_GUIDE.md](docs/IOS_BUILD_GUIDE.md)** を参照。主な手順:
+1. Swift プラグインのビルド（`plugins/ios/build.sh`）
+2. Godot から iOS エクスポート（Xcode プロジェクト生成）
+3. Xcode で署名・ビルド・実機転送
+4. App Store Connect にアップロード
 
 ### CI/CD（GitHub Actions）
 
