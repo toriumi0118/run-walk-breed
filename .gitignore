@@ -8,8 +8,17 @@ build/
 ios/
 *.xcarchive
 *.xcframework
+*.xcuserstate
 *.ipa
 *.app
+*.pck
+*.a
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+xcuserdata/
+DerivedData/
 
 # Signing & Secrets
 *.keystore
