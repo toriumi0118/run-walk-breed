@@ -2,10 +2,14 @@
 .godot/
 *.translation
 
-# Export
-export/android/build/
-export/ios/build/
+# Export / Build artifacts
+export/
 build/
+ios/
+*.xcarchive
+*.xcframework
+*.ipa
+*.app
 
 # Signing & Secrets
 *.keystore
