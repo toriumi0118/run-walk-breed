@@ -18,6 +18,10 @@ build/
 .DS_Store
 Thumbs.db
 
+# Swift / iOS plugins
+plugins/ios/.build/
+bin/ios/
+
 # IDE
 .vscode/
 .idea/

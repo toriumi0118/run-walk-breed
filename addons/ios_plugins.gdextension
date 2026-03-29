@@ -1,0 +1,11 @@
+[configuration]
+entry_symbol = "swift_entry_point"
+compatibility_minimum = 4.2
+
+[libraries]
+ios.debug = "res://bin/ios/debug"
+ios.release = "res://bin/ios/release"
+
+[dependencies]
+ios.debug = {}
+ios.release = {}
