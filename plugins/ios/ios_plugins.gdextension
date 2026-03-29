@@ -1,8 +1,11 @@
 [configuration]
 entry_symbol = "swift_entry_point"
 compatibility_minimum = 4.2
+reloadable = false
 
 [libraries]
+; iOS only — placed outside addons/ to avoid macOS editor auto-scan error.
+; Copy to addons/ during iOS export build (see build.sh).
 ios.debug = "res://bin/ios/debug"
 ios.release = "res://bin/ios/release"
 

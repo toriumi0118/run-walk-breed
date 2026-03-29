@@ -21,6 +21,7 @@ Thumbs.db
 # Swift / iOS plugins
 plugins/ios/.build/
 bin/ios/
+addons/ios_plugins.gdextension
 
 # IDE
 .vscode/

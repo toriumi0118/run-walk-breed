@@ -42,6 +42,12 @@ if [ -f "${BUILD_DIR}/libSwiftGodot.dylib" ]; then
     echo "  Copied libSwiftGodot.dylib"
 fi
 
+# .gdextension をプロジェクトの addons/ にコピー（iOS エクスポート用）
+ADDONS_DIR="${PROJECT_ROOT}/addons"
+mkdir -p "${ADDONS_DIR}"
+cp "$(dirname "$0")/ios_plugins.gdextension" "${ADDONS_DIR}/"
+echo "--- Copied ios_plugins.gdextension to addons/ ---"
+
 echo "=== Build complete ==="
 echo "Output: ${BIN_DIR}"
 ls -la "${BIN_DIR}/"
