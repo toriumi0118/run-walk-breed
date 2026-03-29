@@ -40,6 +40,11 @@ jobs:
           echo "$PROVISIONING_PROFILE_B64" | base64 -d > \
             ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
+      - name: Build iOS plugins
+        run: |
+          cd plugins/ios
+          ./build.sh release
+
       - name: Export iOS
         run: |
           mkdir -p build/ios
