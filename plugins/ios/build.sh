@@ -45,7 +45,7 @@ fi
 # .gdextension をプロジェクトの addons/ にコピー（iOS エクスポート用）
 ADDONS_DIR="${PROJECT_ROOT}/addons"
 mkdir -p "${ADDONS_DIR}"
-cp "$(dirname "$0")/ios_plugins.gdextension" "${ADDONS_DIR}/"
+cp "$(dirname "$0")/ios_plugins.gdextension.template" "${ADDONS_DIR}/ios_plugins.gdextension"
 echo "--- Copied ios_plugins.gdextension to addons/ ---"
 
 echo "=== Build complete ==="
