@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "RunWalkBreedPlugins",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "HealthKitPlugin", type: .dynamic, targets: ["HealthKitPlugin"]),
         .library(name: "LocationPlugin", type: .dynamic, targets: ["LocationPlugin"]),

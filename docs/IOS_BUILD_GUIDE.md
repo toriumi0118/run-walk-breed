@@ -177,7 +177,7 @@ open export/ios/RunWalkBreed.xcodeproj
    - `NSLocationAlwaysAndWhenInUseUsageDescription` が設定されていること
 
 4. **Deployment Target**:
-   - iOS 16.0 以上に設定（SwiftGodot プラグインの要件）
+   - iOS 17.0 以上に設定（SwiftGodot の要件）
 
 ### 5-4. 実機ビルド・転送
 
