@@ -6,10 +6,10 @@ class HealthKitPlugin: Object {
 
     // MARK: - Signals
 
-    #signal(authorizationChanged, arguments: ["authorized": Bool.self])
-    #signal(stepsUpdated, arguments: ["steps": Int.self])
-    #signal(distanceUpdated, arguments: ["distance_m": Double.self])
-    #signal(errorOccurred, arguments: ["message": String.self])
+    #signal("authorizationChanged", arguments: ["authorized": Bool.self])
+    #signal("stepsUpdated", arguments: ["steps": Int.self])
+    #signal("distanceUpdated", arguments: ["distance_m": Double.self])
+    #signal("errorOccurred", arguments: ["message": String.self])
 
     // MARK: - Properties
 
@@ -23,13 +23,8 @@ class HealthKitPlugin: Object {
 
     // MARK: - Lifecycle
 
-    required init() {
-        super.init()
-        isAvailable = HKHealthStore.isHealthDataAvailable()
-    }
-
-    required init(nativeHandle: UnsafeRawPointer) {
-        super.init(nativeHandle: nativeHandle)
+    required init(_ context: InitContext) {
+        super.init(context)
         isAvailable = HKHealthStore.isHealthDataAvailable()
     }
 

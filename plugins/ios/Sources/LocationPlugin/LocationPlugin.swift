@@ -2,13 +2,13 @@ import SwiftGodot
 import CoreLocation
 
 @Godot
-class LocationPlugin: Object, CLLocationManagerDelegate {
+class LocationPlugin: Object {
 
     // MARK: - Signals
 
-    #signal(locationUpdated, arguments: ["latitude": Double.self, "longitude": Double.self, "accuracy": Double.self])
-    #signal(authorizationChanged, arguments: ["status": String.self])
-    #signal(errorOccurred, arguments: ["message": String.self])
+    #signal("locationUpdated", arguments: ["latitude": Double.self, "longitude": Double.self, "accuracy": Double.self])
+    #signal("authorizationChanged", arguments: ["status": String.self])
+    #signal("errorOccurred", arguments: ["message": String.self])
 
     // MARK: - Properties
 
@@ -19,21 +19,18 @@ class LocationPlugin: Object, CLLocationManagerDelegate {
     @Export var accuracy: Double = 0.0
 
     private let locationManager = CLLocationManager()
+    private var locationDelegate: LocationDelegate?
 
     // MARK: - Lifecycle
 
-    required init() {
-        super.init()
-        setupLocationManager()
-    }
-
-    required init(nativeHandle: UnsafeRawPointer) {
-        super.init(nativeHandle: nativeHandle)
+    required init(_ context: InitContext) {
+        super.init(context)
         setupLocationManager()
     }
 
     private func setupLocationManager() {
-        locationManager.delegate = self
+        locationDelegate = LocationDelegate(plugin: self)
+        locationManager.delegate = locationDelegate
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = 5.0  // 5m ごとに更新
         locationManager.allowsBackgroundLocationUpdates = false
@@ -80,43 +77,54 @@ class LocationPlugin: Object, CLLocationManagerDelegate {
     func setDistanceFilter(meters: Double) {
         locationManager.distanceFilter = meters
     }
+}
 
-    // MARK: - CLLocationManagerDelegate
+// MARK: - CLLocationManagerDelegate (NSObject ベースのヘルパー)
+// SwiftGodot の Object は NSObject ではないため、delegate を別クラスに分離
+
+private class LocationDelegate: NSObject, CLLocationManagerDelegate {
+    weak var plugin: LocationPlugin?
+
+    init(plugin: LocationPlugin) {
+        self.plugin = plugin
+        super.init()
+    }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        latitude = location.coordinate.latitude
-        longitude = location.coordinate.longitude
-        accuracy = location.horizontalAccuracy
-        emit(signal: LocationPlugin.locationUpdated, latitude, longitude, accuracy)
+        guard let plugin, let location = locations.last else { return }
+        plugin.latitude = location.coordinate.latitude
+        plugin.longitude = location.coordinate.longitude
+        plugin.accuracy = location.horizontalAccuracy
+        plugin.emit(signal: LocationPlugin.locationUpdated, plugin.latitude, plugin.longitude, plugin.accuracy)
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        guard let plugin else { return }
         let status: String
         switch manager.authorizationStatus {
         case .authorizedWhenInUse:
-            isAuthorized = true
+            plugin.isAuthorized = true
             status = "authorized_when_in_use"
         case .authorizedAlways:
-            isAuthorized = true
+            plugin.isAuthorized = true
             status = "authorized_always"
         case .denied:
-            isAuthorized = false
+            plugin.isAuthorized = false
             status = "denied"
         case .restricted:
-            isAuthorized = false
+            plugin.isAuthorized = false
             status = "restricted"
         case .notDetermined:
-            isAuthorized = false
+            plugin.isAuthorized = false
             status = "not_determined"
         @unknown default:
-            isAuthorized = false
+            plugin.isAuthorized = false
             status = "unknown"
         }
-        emit(signal: LocationPlugin.authorizationChanged, status)
+        plugin.emit(signal: LocationPlugin.authorizationChanged, status)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        emit(signal: LocationPlugin.errorOccurred, error.localizedDescription)
+        plugin?.emit(signal: LocationPlugin.errorOccurred, error.localizedDescription)
     }
 }

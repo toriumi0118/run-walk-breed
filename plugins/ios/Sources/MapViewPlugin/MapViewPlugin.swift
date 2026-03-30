@@ -7,8 +7,8 @@ class MapViewPlugin: Object {
 
     // MARK: - Signals
 
-    #signal(mapReady)
-    #signal(errorOccurred, arguments: ["message": String.self])
+    #signal("mapReady")
+    #signal("errorOccurred", arguments: ["message": String.self])
 
     // MARK: - Properties
 
@@ -18,12 +18,8 @@ class MapViewPlugin: Object {
 
     // MARK: - Lifecycle
 
-    required init() {
-        super.init()
-    }
-
-    required init(nativeHandle: UnsafeRawPointer) {
-        super.init(nativeHandle: nativeHandle)
+    required init(_ context: InitContext) {
+        super.init(context)
     }
 
     // MARK: - WebView Management

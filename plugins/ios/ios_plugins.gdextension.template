@@ -4,11 +4,17 @@ compatibility_minimum = 4.2
 reloadable = false
 
 [libraries]
-; iOS only — placed outside addons/ to avoid macOS editor auto-scan error.
-; Copy to addons/ during iOS export build (see build.sh).
-ios.debug = "res://bin/ios/debug"
-ios.release = "res://bin/ios/release"
+ios.debug = "res://bin/ios/debug/HealthKitPlugin.framework"
+ios.release = "res://bin/ios/release/HealthKitPlugin.framework"
 
 [dependencies]
-ios.debug = {}
-ios.release = {}
+ios.debug = {
+"res://bin/ios/debug/SwiftGodot.framework": "",
+"res://bin/ios/debug/LocationPlugin.framework": "",
+"res://bin/ios/debug/MapViewPlugin.framework": ""
+}
+ios.release = {
+"res://bin/ios/release/SwiftGodot.framework": "",
+"res://bin/ios/release/LocationPlugin.framework": "",
+"res://bin/ios/release/MapViewPlugin.framework": ""
+}
