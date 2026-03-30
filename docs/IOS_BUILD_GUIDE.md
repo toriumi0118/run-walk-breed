@@ -149,6 +149,8 @@ godot --headless --export-release "iOS" ../run-walk-breed-export/ios/RunWalkBree
 ```
 
 > **プラグインビルドについて**: `ios_export.sh` は内部で `plugins/ios/build.sh` を呼び出し、SwiftGodot プラグイン（HealthKitPlugin, LocationPlugin, MapViewPlugin）をビルドする。成果物は `bin/ios/<config>/` に配置され、`addons/ios_plugins.gdextension` が生成される。プラグインに変更がない場合は `--skip-plugins` でスキップ可能。
+>
+> **Active Development**: エクスポート後に `scripts/setup_active_dev.rb` が自動実行され、`.pck` 除外・プロジェクトフォルダのリンク・`godot_path` 設定が行われる。以降は Godot 編集 → Xcode ⌘R のみで実機テスト可能。再エクスポート時も自動で再セットアップされる。
 
 **重要**: Godot の iOS エクスポートは `.ipa` を直接出力するのではなく、**Xcode プロジェクト** を生成する。最終ビルドは Xcode で行う。
 
@@ -197,73 +199,13 @@ open ../run-walk-breed-export/ios/RunWalkBreed.xcodeproj
 | GPS が動作しない                      | Info.plist の Usage Description が設定されているか確認                                 |
 | プラグインが読み込まれない            | `build.sh` を実行して `addons/ios_plugins.gdextension` が存在するか確認                |
 
----
-
-## 4-6. Active Development ワークフロー（再エクスポート不要の開発手順）
-
-> 参考: [Godot 公式 — Active development considerations](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_ios.html#active-development-considerations)
-
-Godot で変更するたびに iOS エクスポートをやり直す必要がなくなる開発ワークフロー。
-Godot プロジェクトフォルダを Xcode プロジェクトに直接リンクし、`.pck` の代わりにソースファイルを参照させる。
-
-### 前提
-
-- セクション 4-1 の初回エクスポートが完了していること
-- **重要**: Godot プロジェクトフォルダ名と Xcode プロジェクト名が異なること
-  - Godot プロジェクト: `run-walk-breed/`
-  - Xcode プロジェクト: `RunWalkBreed.xcodeproj`
-  - → 名前が異なるので OK（同名だと Xcode の署名で問題が発生する）
-
-### セットアップ手順
-
-1. **Xcode で生成済みプロジェクトを開く**:
-
-   ```bash
-   open ../run-walk-breed-export/ios/RunWalkBreed.xcodeproj
-   ```
-
-2. **Godot プロジェクトフォルダを Xcode にドラッグ**:
-   - Finder でプロジェクトルート（`run-walk-breed/`）を Xcode の左側ファイルブラウザにドラッグ
-   - ダイアログで以下を選択:
-     - **"Copy items if needed"** は **チェックしない**（参照リンクにする）
-     - **"Create folder references"** を選択（"Create groups" ではない）
-     - **Target Membership** の **チェックを外す**
-
-3. **リンクしたフォルダの設定**:
-   - Xcode の左側で追加したフォルダを選択
-   - File Inspector（右ペイン）で:
-     - **Location**: Relative to Project
-   - Build Phases → Copy Bundle Resources に追加されていることを確認
-     - フォルダを Target Membership に追加
-
-4. **`.pck` ファイルを削除**:
-   - Xcode のプロジェクトナビゲータで `.pck` ファイルを右クリック
-   - **Delete** → **Remove Reference**（ファイルシステムからは削除しない）
-
-5. **Info.plist に `godot_path` を追加**:
-   - Xcode で `Info.plist` を開く
-   - 新しい行を追加:
-     - **Key**: `godot_path`
-     - **Type**: String
-     - **Value**: `run-walk-breed`（ドラッグしたフォルダ名と一致させる）
-
-### 開発の流れ
-
-セットアップ完了後の日常開発:
-
-```
-1. Godot エディタでコード・シーンを編集
-2. Xcode で ⌘R → 実機にビルド & デプロイ
-   （再エクスポート不要！）
-```
-
-### 注意事項
+### Active Development 注意事項
 
 | 項目                       | 説明                                                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | 再エクスポートが必要な場合 | `export_presets.cfg` を変更した場合、新しいプラグインを追加した場合、Godot のバージョンをアップデートした場合      |
+| 再エクスポート時           | `ios_export.sh` が Active Development セットアップも自動で再実行するため、手動設定は不要                           |
 | パフォーマンス             | この方式ではリソースが `.pck` にパックされないため、ビルドサイズが大きくなる。リリース時は通常のエクスポートを使う |
-| `export_project_only`      | 現在 `true` に設定済み。Xcode プロジェクトのみ生成し、Xcode 側でビルドする                                         |
 
 ---
 

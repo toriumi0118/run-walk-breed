@@ -45,6 +45,12 @@ fi
 
 godot --headless ${EXPORT_FLAG} "iOS" "${EXPORT_DIR}/RunWalkBreed.xcodeproj"
 
+# 4. Active Development セットアップ（.pck 除外 + フォルダ参照 + godot_path）
+echo "--- Setting up Active Development workflow ---"
+ruby "${PROJECT_ROOT}/scripts/setup_active_dev.rb" \
+    "${EXPORT_DIR}/RunWalkBreed.xcodeproj" \
+    "${PROJECT_ROOT}"
+
 echo ""
 echo "=== Export complete ==="
 echo "Xcode project: ${EXPORT_DIR}/RunWalkBreed.xcodeproj"
