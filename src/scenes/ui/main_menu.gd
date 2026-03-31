@@ -20,6 +20,7 @@ func _on_start_pressed() -> void:
 		# ダミーの歩数を適用（ネイティブ連携前のテスト用）
 		var nurture := NurtureSystem.new()
 		nurture.apply_steps(pet, 3000)
+		SaveManager.save_pet(pet)
 	var home := preload("res://src/scenes/ui/home_screen.tscn").instantiate()
 	home.setup(pet)
 	get_tree().root.add_child(home)

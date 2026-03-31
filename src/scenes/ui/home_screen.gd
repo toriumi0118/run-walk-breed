@@ -57,6 +57,7 @@ func _on_skill_pressed() -> void:
 	get_tree().root.add_child(skill_screen)
 	hide()
 	skill_screen.closed.connect(func() -> void:
+		SaveManager.save_pet(pet_data)
 		skill_screen.queue_free()
 		show()
 		refresh()
@@ -77,6 +78,8 @@ func _on_battle_pressed() -> void:
 	hide()
 	battle_screen.start_battle(pet_data, opponent)
 	battle_screen.battle_finished.connect(func(result: Dictionary) -> void:
+		_apply_battle_rewards(result)
+		SaveManager.save_pet(pet_data)
 		battle_screen.queue_free()
 		show()
 		refresh()
@@ -86,6 +89,27 @@ func _on_battle_pressed() -> void:
 func _on_map_pressed() -> void:
 	GameManager.change_state(GameManager.GameState.MAP)
 	# TODO: マップ画面へ遷移
+
+
+## バトル報酬を適用（勝利: 200 EXP、引き分け: 100 EXP、敗北: 50 EXP）
+func _apply_battle_rewards(result: Dictionary) -> void:
+	var reward_exp: int
+	match result["result"] as Enums.BattleResult:
+		Enums.BattleResult.WIN:
+			reward_exp = 200
+		Enums.BattleResult.DRAW, Enums.BattleResult.TIMEOUT:
+			reward_exp = 100
+		_:
+			reward_exp = 50
+
+	var old_level := pet_data.level
+	pet_data.add_experience(reward_exp)
+
+	# レベルアップ時のスキル習得チェック
+	for lv in range(old_level + 1, pet_data.level + 1):
+		var new_skills := SkillDatabase.get_learnable_skills(pet_data.pet_type, lv)
+		for skill in new_skills:
+			pet_data.learn_skill(skill)
 
 
 func _random_opponent_type() -> Enums.PetType:
