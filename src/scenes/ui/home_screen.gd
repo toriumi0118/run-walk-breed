@@ -10,11 +10,15 @@ class_name HomeScreen
 @onready var _distance_label: Label = %DistanceLabel
 @onready var _exp_bar: ProgressBar = %ExpBar
 @onready var _exp_label: Label = %ExpLabel
+@onready var _native_banner: Label = %NativeBanner
 @onready var _skill_button: Button = %SkillButton
 @onready var _battle_button: Button = %BattleButton
 @onready var _map_button: Button = %MapButton
 
 var pet_data: PetData
+var _nurture: NurtureSystem
+var _last_known_steps: int = 0
+var _last_known_distance: float = 0.0
 
 
 func _ready() -> void:
@@ -22,9 +26,26 @@ func _ready() -> void:
 	_battle_button.pressed.connect(_on_battle_pressed)
 	_map_button.pressed.connect(_on_map_pressed)
 
+	# ヘルスケアデータの自動反映を接続
+	_nurture = NurtureSystem.new()
+	DataManager.steps_updated.connect(_on_steps_updated)
+	DataManager.distance_updated.connect(_on_distance_updated)
+
+	# ネイティブ連携が利用可能なら初回データ取得を要求
+	_request_initial_health_data()
+
+
+func _exit_tree() -> void:
+	if DataManager.steps_updated.is_connected(_on_steps_updated):
+		DataManager.steps_updated.disconnect(_on_steps_updated)
+	if DataManager.distance_updated.is_connected(_on_distance_updated):
+		DataManager.distance_updated.disconnect(_on_distance_updated)
+
 
 func setup(data: PetData) -> void:
 	pet_data = data
+	_last_known_steps = data.total_steps
+	_last_known_distance = data.total_distance_m
 	refresh()
 
 
@@ -47,6 +68,8 @@ func refresh() -> void:
 	_exp_bar.max_value = pet_data.get_exp_to_next_level()
 	_exp_bar.value = pet_data.experience
 	_exp_label.text = "EXP: %d / %d" % [pet_data.experience, pet_data.get_exp_to_next_level()]
+
+	_update_native_banner()
 
 
 func _on_skill_pressed() -> void:
@@ -88,7 +111,15 @@ func _on_battle_pressed() -> void:
 
 func _on_map_pressed() -> void:
 	GameManager.change_state(GameManager.GameState.MAP)
-	# TODO: マップ画面へ遷移
+	var map_screen := preload("res://src/scenes/map/map_screen.tscn").instantiate()
+	get_tree().root.add_child(map_screen)
+	hide()
+	map_screen.closed.connect(func() -> void:
+		map_screen.queue_free()
+		GameManager.change_state(GameManager.GameState.HOME)
+		show()
+		refresh()
+	)
 
 
 ## バトル報酬を適用（勝利: 200 EXP、引き分け: 100 EXP、敗北: 50 EXP）
@@ -110,6 +141,60 @@ func _apply_battle_rewards(result: Dictionary) -> void:
 		var new_skills := SkillDatabase.get_learnable_skills(pet_data.pet_type, lv)
 		for skill in new_skills:
 			pet_data.learn_skill(skill)
+
+
+## ヘルスケアデータ受信: 歩数の差分をペットに反映
+func _on_steps_updated(steps: int) -> void:
+	if not pet_data:
+		return
+	var new_steps := steps - _last_known_steps
+	if new_steps > 0:
+		_nurture.apply_steps(pet_data, new_steps)
+		_last_known_steps = steps
+		SaveManager.save_pet(pet_data)
+		refresh()
+
+
+## ヘルスケアデータ受信: 距離の差分をペットに反映
+func _on_distance_updated(distance_m: float) -> void:
+	if not pet_data:
+		return
+	var new_distance := distance_m - _last_known_distance
+	if new_distance > 0.0:
+		_nurture.apply_distance(pet_data, new_distance)
+		_last_known_distance = distance_m
+		SaveManager.save_pet(pet_data)
+		refresh()
+
+
+## ネイティブ連携の状態をバナーに表示
+func _update_native_banner() -> void:
+	var health_bridge: Node = DataManager._health_bridge
+	var gps_bridge: Node = DataManager._gps_bridge
+	var health_ok := health_bridge != null and health_bridge.is_available()
+	var gps_ok := gps_bridge != null and gps_bridge.is_available()
+
+	if health_ok and gps_ok:
+		_native_banner.text = ""
+	elif not health_ok and not gps_ok:
+		_native_banner.text = "[Offline] ダミーデータで動作中"
+	elif not health_ok:
+		_native_banner.text = "[Offline] 歩数データは手動更新"
+	else:
+		_native_banner.text = "[Offline] 位置情報は利用不可"
+
+
+## ネイティブ連携が利用可能なら今日のデータを取得
+func _request_initial_health_data() -> void:
+	var health_bridge: Node = DataManager._health_bridge
+	if health_bridge and health_bridge.is_available():
+		health_bridge.fetch_today_steps()
+		health_bridge.fetch_today_distance()
+		health_bridge.enable_background_delivery()
+
+	var gps_bridge: Node = DataManager._gps_bridge
+	if gps_bridge and gps_bridge.is_available():
+		gps_bridge.start_tracking()
 
 
 func _random_opponent_type() -> Enums.PetType:

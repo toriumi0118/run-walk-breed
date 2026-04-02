@@ -5,7 +5,7 @@
 ```
 Phase 0: 基盤構築           ████████████ 完了
 Phase 1: コアゲームループ    ████████████ 完了
-Phase 2: ネイティブ連携      ░░░░░░░░░░░░ 未着手
+Phase 2: ネイティブ連携      ████████░░░░ iOS完了（Android未着手）
 Phase 3: マルチプレイ/対戦   ░░░░░░░░░░░░ 未着手
 Phase 4: 仕上げ・ストア公開  ░░░░░░░░░░░░ 未着手
 
@@ -107,7 +107,7 @@ Godot 内で完結するゲームの中核部分。ネイティブ連携なし�
 
 ---
 
-## Phase 2: ネイティブ連携
+## Phase 2: ネイティブ連携（iOS 完了）
 
 実際のデバイス機能と接続し、歩数・GPS が育成に反映される状態にする。
 
@@ -117,35 +117,35 @@ Godot 内で完結するゲームの中核部分。ネイティブ連携なし�
   - 権限リクエスト
   - 歩数取得
   - 走行距離取得
-- [ ] iOS: HealthKit GDExtension 実装（SwiftGodot）
+- [x] iOS: HealthKit GDExtension 実装（SwiftGodot）
   - 権限リクエスト
   - 歩数取得
   - 走行距離取得
-- [ ] health_bridge.gd の結合テスト
-- [ ] ヘルスケアデータ → 育成パラメータへの反映
+- [x] health_bridge.gd の結合テスト
+- [x] ヘルスケアデータ → 育成パラメータへの反映
 
 ### 2-2. GPS / 位置情報
 
 - [ ] Android: PraxisMapper GPS Plugin 導入・設定
-- [ ] iOS: Core Location GDExtension 実装（SwiftGodot）
-- [ ] gps_bridge.gd の結合テスト
-- [ ] ルート記録機能（座標の配列管理）
-- [ ] 走行距離のリアルタイム計算（Haversine）
-- [ ] バックグラウンド位置追跡の検討
+- [x] iOS: Core Location GDExtension 実装（SwiftGodot）
+- [x] gps_bridge.gd の結合テスト
+- [x] ルート記録機能（座標の配列管理）
+- [x] 走行距離のリアルタイム計算（Haversine）
+- [x] バックグラウンド位置追跡の検討
 
 ### 2-3. 地図表示
 
 - [ ] Android: godot-webview プラグイン導入
-- [ ] iOS: WKWebView wrapper 実装
-- [ ] 地図 HTML テンプレート作成（OSM or Google Maps）
-- [ ] 現在地マーカー表示
-- [ ] 走行ルートのポリライン描画
-- [ ] map_bridge.gd の結合テスト
+- [x] iOS: WKWebView wrapper 実装
+- [x] 地図 HTML テンプレート作成（OSM or Google Maps）
+- [x] 現在地マーカー表示
+- [x] 走行ルートのポリライン描画
+- [x] map_bridge.gd の結合テスト
 
 ### 2-4. 権限とプライバシー
 
-- [ ] 権限リクエストフロー（初回起動時）
-- [ ] 権限が拒否された場合のフォールバック UI
+- [x] 権限リクエストフロー（初回起動時）
+- [x] 権限が拒否された場合のフォールバック UI
 - [ ] プライバシーポリシーの作成
 
 ---

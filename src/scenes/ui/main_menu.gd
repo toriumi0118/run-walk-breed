@@ -12,15 +12,27 @@ func _ready() -> void:
 
 
 func _on_start_pressed() -> void:
-	GameManager.change_state(GameManager.GameState.HOME)
 	# ペットを生成（セーブデータがあればロード、なければ新規作成）
 	var pet := SaveManager.load_pet()
 	if not pet:
 		pet = PetFactory.create("MyPet", Enums.PetType.RUNNER)
-		# ダミーの歩数を適用（ネイティブ連携前のテスト用）
-		var nurture := NurtureSystem.new()
-		nurture.apply_steps(pet, 3000)
 		SaveManager.save_pet(pet)
+
+	# 初回起動時は権限リクエスト画面を表示
+	if PermissionScreen.needs_permission_request():
+		var perm_screen := preload("res://src/scenes/ui/permission_screen.tscn").instantiate()
+		get_tree().root.add_child(perm_screen)
+		hide()
+		perm_screen.permissions_completed.connect(func() -> void:
+			perm_screen.queue_free()
+			_open_home(pet)
+		)
+	else:
+		_open_home(pet)
+
+
+func _open_home(pet: PetData) -> void:
+	GameManager.change_state(GameManager.GameState.HOME)
 	var home := preload("res://src/scenes/ui/home_screen.tscn").instantiate()
 	home.setup(pet)
 	get_tree().root.add_child(home)
