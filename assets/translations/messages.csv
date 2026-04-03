@@ -1,0 +1,115 @@
+keys,ja,en
+APP_TITLE,Run Walk Breed,Run Walk Breed
+START,スタート!!,Start!!
+SETTINGS,設定,Settings
+HOME,ホーム,HOME
+SKILL_EDIT,スキル編成,Skill Edit
+BATTLE,バトル,Battle
+MAP,マップ,Map
+BACK,< 戻る,< Back
+CONTINUE,続ける,Continue
+NEXT,次へ,Next
+SKIP,スキップ,Skip
+BEGIN,はじめる,Begin
+STEPS_FORMAT,%d 歩,%d steps
+DISTANCE_FORMAT,%.1f km,%.1f km
+EXP_FORMAT,EXP: %d / %d,EXP: %d / %d
+STATS_FORMAT,HP:%d  ATK:%d  DEF:%d  SPD:%d,HP:%d  ATK:%d  DEF:%d  SPD:%d
+HP_FORMAT,%d / %d,%d / %d
+TURN_FORMAT,ターン %s,Turn %s
+BATTLE_START,バトル開始！,Battle Start!
+VS,VS,VS
+RESULT,結果,Result
+WIN_FORMAT,%s の勝利！,%s Wins!
+DRAW,引き分け！,Draw!
+TIMEOUT,時間切れ！,Time Out!
+ROUTE,ルート,Route
+CLEAR,クリア,Clear
+MAP_AREA,地図エリア,Map Area
+ROUTE_SHOWING,ルート表示中（%d ポイント）,Showing route (%d points)
+NO_ROUTE_DATA,ルートデータがありません,No route data
+MAP_UNAVAILABLE,地図はこのデバイスでは利用できません,Map not available on this device
+COORDS_FORMAT,"%.4f, %.4f","%.4f, %.4f"
+PERM_TITLE,アプリの権限設定,App Permissions
+PERM_DESCRIPTION,"ペットの育成に歩数・位置情報を使用します。
+権限を許可すると、実際の活動データが
+ゲームに反映されます。","This app uses step count and location data
+to raise your pet. Grant permissions to
+reflect your real activity in the game."
+PERM_HEALTH_LABEL,ヘルスケアデータ（歩数・走行距離）,Health Data (Steps & Distance)
+PERM_HEALTH_BUTTON,ヘルスケア権限を許可,Grant Health Permission
+PERM_LOCATION_LABEL,位置情報（走行ルートの記録）,Location (Route Recording)
+PERM_LOCATION_BUTTON,位置情報権限を許可,Grant Location Permission
+PERM_GRANTED,✓ 許可済み,✓ Granted
+PERM_DENIED,✗ 拒否（設定から変更可能）,✗ Denied (change in Settings)
+PERM_UNAVAILABLE,（このデバイスでは利用不可）,(Not available on this device)
+PERM_DESKTOP,"デスクトップ環境ではネイティブ機能は利用できません。
+ダミーデータで動作します。","Native features are not available on desktop.
+Running with dummy data."
+PERM_REQUESTING,リクエスト中...,Requesting...
+PERM_GRANTED_BUTTON,許可済み,Granted
+PERM_DENIED_BUTTON,拒否されました,Denied
+BANNER_OFFLINE,[Offline] ダミーデータで動作中,[Offline] Running with dummy data
+BANNER_NO_HEALTH,[Offline] 歩数データは手動更新,[Offline] Step data: manual update
+BANNER_NO_GPS,[Offline] 位置情報は利用不可,[Offline] Location unavailable
+EQUIPPED_SKILLS,装備中のスキル,Equipped Skills
+LEARNED_SKILLS,習得済みスキル,Learned Skills
+EQUIPPED_FORMAT,装備中: %d / %d,Equipped: %d / %d
+EQUIP,装備,Equip
+UNEQUIP,解除,Unequip
+REMOVE,外す,Remove
+MAX_EQUIPPED,スキル装備は最大4つです,Max 4 skills equipped
+ALREADY_EQUIPPED,既に装備済みです,Already equipped
+POWER_FORMAT,威力: %d,Power: %d
+TUT_WELCOME_TITLE,Run Walk Breed へようこそ！,Welcome to Run Walk Breed!
+TUT_WELCOME_BODY,"このゲームでは、あなたの歩数や走行距離で
+ロボット風のペットを育成します。
+
+歩けば歩くほど、ペットが強くなります！","In this game, you raise a robot-style pet
+using your steps and running distance.
+
+The more you walk, the stronger your pet gets!"
+TUT_NURTURE_TITLE,ペットの育成,Pet Nurturing
+TUT_NURTURE_BODY,"毎日の歩数がペットの経験値になります。
+レベルが上がるとステータスが成長し、
+新しいスキルを覚えます。
+
+ペットのタイプ（Runner / Walker / Sprinter）で
+得意なステータスが異なります。","Your daily steps become pet experience.
+Leveling up grows stats and
+unlocks new skills.
+
+Each pet type (Runner / Walker / Sprinter)
+excels at different stats."
+TUT_SKILL_TITLE,スキル編成,Skill Setup
+TUT_SKILL_BODY,"ペットは最大 4 つのスキルを装備できます。
+攻撃・バフ・デバフ・回復を
+うまく組み合わせましょう。
+
+ホーム画面の「Skill Edit」から編成できます。","Your pet can equip up to 4 skills.
+Mix attack, buff, debuff, and heal
+for the best strategy.
+
+Access via ""Skill Edit"" on the home screen."
+TUT_BATTLE_TITLE,オートバトル,Auto Battle
+TUT_BATTLE_BODY,"バトルはフルオートで進行します。
+あなたが操作する必要はありません。
+
+育成で鍛えたステータスと
+選んだスキル構成が勝敗を決めます。","Battles run fully automatically.
+No player input needed.
+
+Your trained stats and
+chosen skill setup decide the outcome."
+TUT_START_TITLE,"さあ、始めましょう！",Let's Get Started!
+TUT_START_BODY,"まずは歩いてペットを育てましょう。
+バトルに勝つと追加の経験値がもらえます。
+
+マップ画面で走行ルートも確認できます。
+
+楽しいペット育成ライフを！","Start walking to raise your pet.
+Winning battles grants bonus experience.
+
+Check your running route on the map.
+
+Enjoy your pet-raising journey!"

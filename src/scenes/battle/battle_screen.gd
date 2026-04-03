@@ -44,7 +44,7 @@ func start_battle(pet_a: PetData, pet_b: PetData) -> void:
 	_hp_bar_b.value = _engine.get_max_hp_b()
 	_update_hp_labels()
 
-	_turn_label.text = "Battle Start!"
+	_turn_label.text = tr("BATTLE_START")
 	_action_label.text = ""
 
 	# バトル計算を実行
@@ -83,7 +83,7 @@ func _replay_next_log() -> void:
 	# ターン表示を更新
 	if line.begins_with("[Turn"):
 		var turn_str := line.get_slice("]", 0).get_slice(" ", 1)
-		_turn_label.text = "Turn %s" % turn_str
+		_turn_label.text = tr("TURN_FORMAT") % turn_str
 
 	_replay_index += 1
 
@@ -99,13 +99,13 @@ func _show_result() -> void:
 
 	match result_enum:
 		Enums.BattleResult.WIN:
-			_result_label.text = "%s の勝利！" % winner
+			_result_label.text = tr("WIN_FORMAT") % winner
 		Enums.BattleResult.LOSE:
-			_result_label.text = "%s の勝利！" % winner
+			_result_label.text = tr("WIN_FORMAT") % winner
 		Enums.BattleResult.DRAW:
-			_result_label.text = "引き分け！"
+			_result_label.text = tr("DRAW")
 		Enums.BattleResult.TIMEOUT:
-			_result_label.text = "時間切れ！"
+			_result_label.text = tr("TIMEOUT")
 
 
 func _update_hp_labels() -> void:

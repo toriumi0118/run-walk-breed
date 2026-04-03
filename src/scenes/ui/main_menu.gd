@@ -18,25 +18,46 @@ func _on_start_pressed() -> void:
 		pet = PetFactory.create("MyPet", Enums.PetType.RUNNER)
 		SaveManager.save_pet(pet)
 
-	# 初回起動時は権限リクエスト画面を表示
-	if PermissionScreen.needs_permission_request():
-		var perm_screen := preload("res://src/scenes/ui/permission_screen.tscn").instantiate()
-		get_tree().root.add_child(perm_screen)
-		hide()
-		perm_screen.permissions_completed.connect(func() -> void:
-			perm_screen.queue_free()
-			_open_home(pet)
-		)
+	# 初回起動: チュートリアル → 権限リクエスト → ホーム
+	if TutorialScreen.needs_tutorial():
+		_show_tutorial(pet)
+	elif PermissionScreen.needs_permission_request():
+		_show_permissions(pet)
 	else:
 		_open_home(pet)
 
 
+func _show_tutorial(pet: PetData) -> void:
+	var tutorial := preload("res://src/scenes/ui/tutorial_screen.tscn").instantiate()
+	get_tree().root.add_child(tutorial)
+	hide()
+	tutorial.completed.connect(func() -> void:
+		tutorial.queue_free()
+		if PermissionScreen.needs_permission_request():
+			_show_permissions(pet)
+		else:
+			_open_home(pet)
+	)
+
+
+func _show_permissions(pet: PetData) -> void:
+	var perm_screen := preload("res://src/scenes/ui/permission_screen.tscn").instantiate()
+	get_tree().root.add_child(perm_screen)
+	hide()
+	perm_screen.permissions_completed.connect(func() -> void:
+		perm_screen.queue_free()
+		_open_home(pet)
+	)
+
+
 func _open_home(pet: PetData) -> void:
-	GameManager.change_state(GameManager.GameState.HOME)
-	var home := preload("res://src/scenes/ui/home_screen.tscn").instantiate()
-	home.setup(pet)
-	get_tree().root.add_child(home)
-	queue_free()
+	Transition.transition(func() -> void:
+		GameManager.change_state(GameManager.GameState.HOME)
+		var home := preload("res://src/scenes/ui/home_screen.tscn").instantiate()
+		home.setup(pet)
+		get_tree().root.add_child(home)
+		queue_free()
+	)
 
 
 func _on_settings_pressed() -> void:

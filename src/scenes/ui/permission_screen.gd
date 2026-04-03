@@ -41,9 +41,9 @@ func _on_health_pressed() -> void:
 		_health_bridge.permission_changed.connect(_on_health_permission_result, CONNECT_ONE_SHOT)
 		_health_bridge.request_permission()
 		_health_button.disabled = true
-		_health_button.text = "リクエスト中..."
+		_health_button.text = tr("PERM_REQUESTING")
 	else:
-		_health_status.text = "（このデバイスでは利用不可）"
+		_health_status.text = tr("PERM_UNAVAILABLE")
 		_health_button.disabled = true
 
 
@@ -52,9 +52,9 @@ func _on_location_pressed() -> void:
 		_gps_bridge.permission_changed.connect(_on_location_permission_result, CONNECT_ONE_SHOT)
 		_gps_bridge.request_permission()
 		_location_button.disabled = true
-		_location_button.text = "リクエスト中..."
+		_location_button.text = tr("PERM_REQUESTING")
 	else:
-		_location_status.text = "（このデバイスでは利用不可）"
+		_location_status.text = tr("PERM_UNAVAILABLE")
 		_location_button.disabled = true
 
 
@@ -65,22 +65,22 @@ func _on_skip_pressed() -> void:
 
 func _on_health_permission_result(authorized: bool) -> void:
 	if authorized:
-		_health_status.text = "✓ 許可済み"
-		_health_button.text = "許可済み"
+		_health_status.text = tr("PERM_GRANTED")
+		_health_button.text = tr("PERM_GRANTED_BUTTON")
 	else:
-		_health_status.text = "✗ 拒否（設定から変更可能）"
-		_health_button.text = "拒否されました"
+		_health_status.text = tr("PERM_DENIED")
+		_health_button.text = tr("PERM_DENIED_BUTTON")
 	_health_button.disabled = true
 	_check_all_done()
 
 
 func _on_location_permission_result(status: String) -> void:
 	if status == "authorized" or status == "authorizedWhenInUse" or status == "authorizedAlways":
-		_location_status.text = "✓ 許可済み"
-		_location_button.text = "許可済み"
+		_location_status.text = tr("PERM_GRANTED")
+		_location_button.text = tr("PERM_GRANTED_BUTTON")
 	else:
-		_location_status.text = "✗ 拒否（設定から変更可能）"
-		_location_button.text = "拒否されました"
+		_location_status.text = tr("PERM_DENIED")
+		_location_button.text = tr("PERM_DENIED_BUTTON")
 	_location_button.disabled = true
 	_check_all_done()
 
@@ -95,16 +95,15 @@ func _update_status() -> void:
 	var gps_available := _gps_bridge != null and _gps_bridge.is_available()
 
 	if not health_available:
-		_health_status.text = "（このデバイスでは利用不可）"
+		_health_status.text = tr("PERM_UNAVAILABLE")
 		_health_button.disabled = true
 	if not gps_available:
-		_location_status.text = "（このデバイスでは利用不可）"
+		_location_status.text = tr("PERM_UNAVAILABLE")
 		_location_button.disabled = true
 
-	# デスクトップ環境では両方使えないのでスキップ誘導
 	if not health_available and not gps_available:
-		_description_label.text = "デスクトップ環境ではネイティブ機能は利用できません。\nダミーデータで動作します。"
-		_skip_button.text = "続ける"
+		_description_label.text = tr("PERM_DESKTOP")
+		_skip_button.text = tr("CONTINUE")
 
 
 func _save_permission_state() -> void:

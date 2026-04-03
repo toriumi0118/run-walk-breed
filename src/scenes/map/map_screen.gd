@@ -40,7 +40,7 @@ func _exit_tree() -> void:
 
 func _initialize_map() -> void:
 	if not _map_bridge or not _map_bridge.is_available():
-		_status_label.text = "地図はこのデバイスでは利用できません"
+		_status_label.text = tr("MAP_UNAVAILABLE")
 		_route_button.disabled = true
 		_clear_button.disabled = true
 		return
@@ -70,11 +70,11 @@ func _on_route_pressed() -> void:
 		return
 	var points := DataManager.route_points
 	if points.is_empty():
-		_status_label.text = "ルートデータがありません"
+		_status_label.text = tr("NO_ROUTE_DATA")
 		return
 	_map_bridge.show_route(points)
 	_is_showing_route = true
-	_status_label.text = "ルート表示中（%d ポイント）" % points.size()
+	_status_label.text = tr("ROUTE_SHOWING") % points.size()
 
 
 func _on_clear_pressed() -> void:

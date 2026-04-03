@@ -62,63 +62,72 @@ func refresh() -> void:
 		pet_data.get_speed(),
 	]
 
-	_steps_label.text = "%d steps" % pet_data.total_steps
-	_distance_label.text = "%.1f km" % (pet_data.total_distance_m / 1000.0)
+	_steps_label.text = tr("STEPS_FORMAT") % pet_data.total_steps
+	_distance_label.text = tr("DISTANCE_FORMAT") % (pet_data.total_distance_m / 1000.0)
 
 	_exp_bar.max_value = pet_data.get_exp_to_next_level()
 	_exp_bar.value = pet_data.experience
-	_exp_label.text = "EXP: %d / %d" % [pet_data.experience, pet_data.get_exp_to_next_level()]
+	_exp_label.text = tr("EXP_FORMAT") % [pet_data.experience, pet_data.get_exp_to_next_level()]
 
 	_update_native_banner()
 
 
 func _on_skill_pressed() -> void:
 	GameManager.change_state(GameManager.GameState.HOME)
-	# TODO: スキル編成画面へ遷移
-	var skill_screen := preload("res://src/scenes/ui/skill_edit_screen.tscn").instantiate()
-	skill_screen.setup(pet_data)
-	get_tree().root.add_child(skill_screen)
-	hide()
-	skill_screen.closed.connect(func() -> void:
-		SaveManager.save_pet(pet_data)
-		skill_screen.queue_free()
-		show()
-		refresh()
+	Transition.transition(func() -> void:
+		var skill_screen := preload("res://src/scenes/ui/skill_edit_screen.tscn").instantiate()
+		skill_screen.setup(pet_data)
+		get_tree().root.add_child(skill_screen)
+		hide()
+		skill_screen.closed.connect(func() -> void:
+			Transition.transition(func() -> void:
+				SaveManager.save_pet(pet_data)
+				skill_screen.queue_free()
+				show()
+				refresh()
+			)
+		)
 	)
 
 
 func _on_battle_pressed() -> void:
 	GameManager.change_state(GameManager.GameState.BATTLE)
-	# ダミー対戦相手を生成
 	var opponent := PetFactory.create("Opponent", _random_opponent_type())
-	# 対戦相手のレベルをプレイヤーに合わせる
 	var nurture := NurtureSystem.new()
 	var dummy_steps := pet_data.total_steps + randi_range(-500, 500)
 	nurture.apply_steps(opponent, maxi(100, dummy_steps))
 
-	var battle_screen := preload("res://src/scenes/battle/battle_screen.tscn").instantiate()
-	get_tree().root.add_child(battle_screen)
-	hide()
-	battle_screen.start_battle(pet_data, opponent)
-	battle_screen.battle_finished.connect(func(result: Dictionary) -> void:
-		_apply_battle_rewards(result)
-		SaveManager.save_pet(pet_data)
-		battle_screen.queue_free()
-		show()
-		refresh()
+	Transition.transition(func() -> void:
+		var battle_screen := preload("res://src/scenes/battle/battle_screen.tscn").instantiate()
+		get_tree().root.add_child(battle_screen)
+		hide()
+		battle_screen.start_battle(pet_data, opponent)
+		battle_screen.battle_finished.connect(func(result: Dictionary) -> void:
+			Transition.transition(func() -> void:
+				_apply_battle_rewards(result)
+				SaveManager.save_pet(pet_data)
+				battle_screen.queue_free()
+				show()
+				refresh()
+			)
+		)
 	)
 
 
 func _on_map_pressed() -> void:
 	GameManager.change_state(GameManager.GameState.MAP)
-	var map_screen := preload("res://src/scenes/map/map_screen.tscn").instantiate()
-	get_tree().root.add_child(map_screen)
-	hide()
-	map_screen.closed.connect(func() -> void:
-		map_screen.queue_free()
-		GameManager.change_state(GameManager.GameState.HOME)
-		show()
-		refresh()
+	Transition.transition(func() -> void:
+		var map_screen := preload("res://src/scenes/map/map_screen.tscn").instantiate()
+		get_tree().root.add_child(map_screen)
+		hide()
+		map_screen.closed.connect(func() -> void:
+			Transition.transition(func() -> void:
+				map_screen.queue_free()
+				GameManager.change_state(GameManager.GameState.HOME)
+				show()
+				refresh()
+			)
+		)
 	)
 
 
@@ -177,11 +186,11 @@ func _update_native_banner() -> void:
 	if health_ok and gps_ok:
 		_native_banner.text = ""
 	elif not health_ok and not gps_ok:
-		_native_banner.text = "[Offline] ダミーデータで動作中"
+		_native_banner.text = tr("BANNER_OFFLINE")
 	elif not health_ok:
-		_native_banner.text = "[Offline] 歩数データは手動更新"
+		_native_banner.text = tr("BANNER_NO_HEALTH")
 	else:
-		_native_banner.text = "[Offline] 位置情報は利用不可"
+		_native_banner.text = tr("BANNER_NO_GPS")
 
 
 ## ネイティブ連携が利用可能なら今日のデータを取得

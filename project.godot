@@ -25,6 +25,11 @@ config/icon="res://assets/images/icon.svg"
 GameManager="*res://src/autoload/game_manager.gd"
 AudioManager="*res://src/autoload/audio_manager.gd"
 DataManager="*res://src/autoload/data_manager.gd"
+Transition="*res://src/scenes/common/screen_transition.gd"
+
+[gui]
+
+theme/custom="res://themes/ui_theme.tres"
 
 [display]
 
@@ -36,6 +41,12 @@ window/handheld/orientation=1
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://assets/translations/messages.csv")
+locale/locale_filter_mode=1
+locale/locale_filter=PackedStringArray("ja", "en")
 
 [rendering]
 
